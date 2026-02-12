@@ -1,0 +1,57 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+
+// Only show h2 and h3 in the TOC
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <nav class="toc" aria-label="Table of contents">
+    <p class="toc__title">On this page</p>
+    <ul>
+      {toc.map((heading) => (
+        <li class:list={[`toc__item--${heading.depth}`]}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .toc {
+    font-size: var(--text-sm);
+  }
+
+  .toc__title {
+    font-weight: 700;
+    margin-block-end: var(--space-sm);
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+  }
+
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc li {
+    margin-block-end: var(--space-xs);
+  }
+
+  .toc a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .toc a:hover { color: var(--color-accent); }
+
+  .toc__item--3 { padding-inline-start: var(--space-md); }
+</style>

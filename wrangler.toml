@@ -1,0 +1,16 @@
+# wrangler.toml — Cloudflare Pages configuration
+# This is optional for static builds. Cloudflare Pages auto-detects Astro.
+# Useful if you later switch to output: "server" for SSR.
+
+name = "loomwork"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+main = "./dist/_worker.js"
+routes = [
+  { pattern = "www.loomwork.org", custom_domain = true },
+  { pattern = "loomwork.org", custom_domain = true }
+]
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"

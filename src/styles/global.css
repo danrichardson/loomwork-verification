@@ -1,0 +1,149 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GLOBAL STYLES
+   
+   Change the :root variables to rebrand. Everything cascades
+   from these tokens.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+  /* ── Colors ────────────────────────────────────────────── */
+  --color-bg: #fafaf8;
+  --color-bg-alt: #f0efe8;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #5a5a56;
+  --color-accent: #d97706;       /* amber-600 — solar gold */
+  --color-accent-hover: #b45309;
+  --color-accent-light: #fef3c7;
+  --color-border: #d6d3c8;
+  --color-code-bg: #1e1e1e;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-body: "Source Sans 3", system-ui, -apple-system, sans-serif;
+  --font-heading: "Source Serif 4", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  --text-base: 1.0625rem;    /* 17px — legible on screens */
+  --text-sm: 0.875rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+  --leading: 1.7;
+
+  /* ── Spacing ───────────────────────────────────────────── */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+
+  /* ── Layout ────────────────────────────────────────────── */
+  --content-width: 48rem;      /* ~768px — comfortable reading */
+  --wide-width: 64rem;         /* ~1024px — landing pages */
+  --full-width: 80rem;         /* ~1280px — max container */
+
+  /* ── Misc ──────────────────────────────────────────────── */
+  --radius: 0.375rem;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --transition: 150ms ease;
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+img, video, svg { display: block; max-width: 100%; }
+
+/* ── Base ─────────────────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color var(--transition);
+}
+a:hover { color: var(--color-accent-hover); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+h1 { font-size: var(--text-3xl); margin-block: var(--space-xl) var(--space-lg); }
+h2 { font-size: var(--text-2xl); margin-block: var(--space-xl) var(--space-md); }
+h3 { font-size: var(--text-xl);  margin-block: var(--space-lg) var(--space-md); }
+h4 { font-size: var(--text-lg);  margin-block: var(--space-lg) var(--space-sm); }
+
+p     { margin-block-end: var(--space-md); }
+ul,ol { margin-block-end: var(--space-md); padding-inline-start: 1.5em; }
+li    { margin-block-end: var(--space-xs); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-bg-alt);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--color-code-bg);
+  color: #e0e0e0;
+  padding: var(--space-lg);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin-block-end: var(--space-lg);
+}
+pre code {
+  background: none;
+  padding: 0;
+  font-size: var(--text-sm);
+}
+
+blockquote {
+  border-inline-start: 3px solid var(--color-accent);
+  padding-inline-start: var(--space-lg);
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-lg);
+}
+
+hr {
+  border: none;
+  border-block-start: 1px solid var(--color-border);
+  margin-block: var(--space-xl);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-block-end: var(--space-lg);
+}
+th, td {
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: 1px solid var(--color-border);
+  text-align: start;
+}
+th {
+  font-weight: 600;
+  background: var(--color-bg-alt);
+}
+
+/* ── Utility classes ──────────────────────────────────────── */
+.container       { max-width: var(--content-width); margin-inline: auto; padding-inline: var(--space-lg); }
+.container--wide { max-width: var(--wide-width); }
+.container--full { max-width: var(--full-width); }
+.sr-only         { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+.text-muted      { color: var(--color-text-muted); }
+.text-sm         { font-size: var(--text-sm); }

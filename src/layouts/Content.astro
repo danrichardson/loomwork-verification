@@ -1,0 +1,134 @@
+---
+import Base from "./Base.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  template?: "default" | "landing" | "guide" | "tool";
+  hero_image?: string;
+  hero_alt?: string;
+  date_updated?: Date;
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  description,
+  template = "default",
+  hero_image,
+  hero_alt,
+  date_updated,
+  headings = [],
+} = Astro.props;
+
+const isGuide = template === "guide";
+const isLanding = template === "landing";
+const isTool = template === "tool";
+
+const containerClass = isLanding || isTool
+  ? "container container--wide"
+  : "container";
+---
+
+<Base title={title} description={description}>
+  <article class:list={["page", `page--${template}`]}>
+    {/* Hero image */}
+    {hero_image && (
+      <div class="page__hero">
+        <img src={hero_image} alt={hero_alt || ""} loading="eager" />
+      </div>
+    )}
+
+    <div class={containerClass}>
+      {/* Page header */}
+      {!isTool && (
+        <header class="page__header">
+          <h1>{title}</h1>
+          {date_updated && (
+            <p class="text-muted text-sm">
+              Last updated {date_updated.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+        </header>
+      )}
+
+      {/* Guide layout: sidebar TOC + content */}
+      {isGuide && headings.length > 0 ? (
+        <div class="page__grid">
+          <aside class="page__sidebar">
+            <TableOfContents headings={headings} />
+          </aside>
+          <div class="page__content prose">
+            <slot />
+          </div>
+        </div>
+      ) : (
+        <div class="page__content prose">
+          <slot />
+        </div>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page__hero {
+    max-height: 24rem;
+    overflow: hidden;
+  }
+  .page__hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page__header {
+    padding-block-start: var(--space-xl);
+    padding-block-end: var(--space-lg);
+    border-block-end: 1px solid var(--color-border);
+    margin-block-end: var(--space-xl);
+  }
+
+  .page__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 960px) {
+    .page__grid {
+      grid-template-columns: 14rem 1fr;
+    }
+  }
+
+  .page__sidebar {
+    position: sticky;
+    top: var(--space-lg);
+    align-self: start;
+  }
+
+  .page__content {
+    padding-block-end: var(--space-2xl);
+  }
+
+  /* Prose — styles for rendered MDX content */
+  .prose :global(h2) { margin-block-start: var(--space-2xl); }
+  .prose :global(h3) { margin-block-start: var(--space-xl); }
+  .prose :global(img) {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-block: var(--space-lg);
+  }
+  .prose :global(.callout) {
+    background: var(--color-accent-light);
+    border-inline-start: 3px solid var(--color-accent);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius);
+    margin-block: var(--space-lg);
+  }
+</style>

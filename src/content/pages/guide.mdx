@@ -1,0 +1,129 @@
+---
+title: "Deploy Guide"
+description: "How to fork Loomwork and deploy your own site to Cloudflare Pages in 15 minutes."
+section: "guide"
+nav_order: 10
+template: "guide"
+date_created: 2026-02-12
+---
+
+import Callout from '../../components/Callout.astro';
+
+## Prerequisites
+
+You'll need three things before you start:
+
+- A **GitHub account** (free)
+- A **Cloudflare account** (free)
+- **Node.js 18+** installed on your machine
+
+That's it. No paid services required.
+
+## Step 1: Fork the Repo
+
+Go to the [Loomwork GitHub repo](https://github.com/danrichardson/loomwork) and click **Fork**. This creates your own copy of the project under your GitHub account.
+
+Clone it to your machine:
+
+```bash
+git clone https://github.com/YOUR_USER/loomwork.git my-site
+cd my-site
+npm install
+```
+
+Run the dev server to make sure everything works:
+
+```bash
+npm run dev
+```
+
+You should see the site at `http://localhost:4321`.
+
+## Step 2: Rebrand
+
+Open `src/site.config.ts` and change the name, tagline, description, nav items, and footer to match your project. This is the single file that controls the entire site's identity.
+
+Then open `src/styles/global.css` and change the CSS variables under `:root` — colors, fonts, spacing. These cascade through every page automatically.
+
+## Step 3: Replace the Content
+
+Delete the example pages in `src/content/pages/` and create your own `.mdx` files. Each file needs YAML frontmatter at the top:
+
+```yaml
+---
+title: "Your Page Title"
+description: "A short description for SEO."
+section: "docs"
+nav_order: 10
+template: "default"
+---
+```
+
+The file path becomes the URL. A file at `src/content/pages/docs/getting-started.mdx` renders at `/docs/getting-started`.
+
+## Step 4: Connect to Cloudflare
+
+1. Push your changes to GitHub
+2. Go to **Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git**
+3. Select your forked repo
+4. Set the build settings:
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+5. Click **Deploy**
+
+<Callout type="tip" title="First deploy takes ~60 seconds">
+  Subsequent deploys after a git push are faster — usually under 30 seconds.
+</Callout>
+
+## Step 5: Add a Custom Domain
+
+In your Cloudflare Pages project, go to **Settings → Domains & Routes** and add your custom domain. If your domain's DNS is already on Cloudflare, it connects automatically. Otherwise, add a CNAME record pointing to your worker's `.workers.dev` URL.
+
+## The Authoring Workflow
+
+Once deployed, your day-to-day workflow is:
+
+1. Write or edit `.mdx` files in any text editor (Typora works great on Windows)
+2. Drop images alongside your content files
+3. Commit and push:
+
+```bash
+git add . && git commit -m "new post" && git push
+```
+
+Cloudflare detects the push, builds, and deploys. Your changes are live in under a minute.
+
+## Page Templates
+
+Loomwork includes four layout templates you can set in frontmatter:
+
+- **`default`** — Standard content page, centered at a comfortable reading width
+- **`landing`** — Wider layout with no sidebar, good for home pages
+- **`guide`** — Includes a sticky table of contents sidebar (like this page)
+- **`tool`** — Minimal chrome, wide container, designed for interactive components
+
+## Using Components in MDX
+
+You can import Astro or React components directly in your content:
+
+```mdx
+import Callout from '../../components/Callout.astro';
+
+<Callout type="warning" title="Heads up">
+  This is a warning callout rendered inline in your markdown.
+</Callout>
+```
+
+Built-in components include `Callout` (info, warning, tip, danger) and `YouTube` (responsive video embeds). Add your own to `src/components/`.
+
+## Adding Interactive Features
+
+For calculators, forms, or other interactive elements, create React components in `src/components/` and use Astro's island architecture:
+
+```astro
+import MyWidget from '../components/MyWidget';
+
+<MyWidget client:load />
+```
+
+The `client:load` directive hydrates the component on the client side. The rest of the page stays static HTML.
