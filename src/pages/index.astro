@@ -1,4 +1,11 @@
 ---
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// HOMEPAGE — SITE-SPECIFIC FILE
+//
+// This file is YOURS. Customize the layout, hero, CTAs,
+// and content for your site. It won't conflict with
+// framework updates from the loomwork repo.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 import Base from "../layouts/Base.astro";
 import { SITE } from "../site.config";
 ---
@@ -11,14 +18,9 @@ import { SITE } from "../site.config";
       <p class="hero__description">{SITE.description}</p>
 
       <div class="hero__actions">
-        <!--
-          Customize these CTAs per-project.
-          For Johnny Solarseed these will be:
-            "I'm curious" → /learn/
-            "I'm ready to build" → /guides/
-            "I need help" → /consult/
-        -->
-        <a href="/about" class="btn btn--primary">Learn More</a>
+        {SITE.nav.map((item) => (
+          <a href={item.href} class="btn btn--secondary">{item.label}</a>
+        ))}
       </div>
     </div>
   </section>
@@ -27,53 +29,31 @@ import { SITE } from "../site.config";
 <style>
   .hero {
     padding-block: var(--space-2xl);
-    text-align: center;
   }
 
   .hero__title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    margin-block-end: var(--space-md);
-    letter-spacing: -0.02em;
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    margin-block-end: var(--space-sm);
+    letter-spacing: -0.025em;
   }
 
   .hero__tagline {
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     color: var(--color-accent);
     font-weight: 600;
-    margin-block-end: var(--space-md);
+    margin-block-end: var(--space-lg);
   }
 
   .hero__description {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     color: var(--color-text-muted);
     max-width: 36rem;
-    margin-inline: auto;
     margin-block-end: var(--space-xl);
   }
 
   .hero__actions {
     display: flex;
-    gap: var(--space-md);
-    justify-content: center;
+    gap: var(--space-sm);
     flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: var(--radius);
-    font-weight: 700;
-    text-decoration: none;
-    font-size: var(--text-base);
-    transition: background var(--transition), color var(--transition);
-  }
-
-  .btn--primary {
-    background: var(--color-accent);
-    color: white;
-  }
-  .btn--primary:hover {
-    background: var(--color-accent-hover);
-    color: white;
   }
 </style>

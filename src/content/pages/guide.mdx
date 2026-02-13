@@ -1,6 +1,6 @@
 ---
 title: "Deploy Guide"
-description: "How to fork Loomwork and deploy your own site to Cloudflare Pages in 15 minutes."
+description: "How to fork Loomwork and deploy your own site to Cloudflare in 15 minutes."
 section: "guide"
 nav_order: 10
 template: "guide"
@@ -11,29 +11,15 @@ import Callout from '../../components/Callout.astro';
 
 ## Prerequisites
 
-You'll need three things before you start:
+You need three things: a **GitHub account** (free), a **Cloudflare account** (free), and **Node.js 18+** on your machine. No paid services required.
 
-- A **GitHub account** (free)
-- A **Cloudflare account** (free)
-- **Node.js 18+** installed on your machine
-
-That's it. No paid services required.
-
-## Step 1: Fork the Repo
-
-Go to the [Loomwork GitHub repo](https://github.com/danrichardson/loomwork) and click **Fork**. This creates your own copy of the project under your GitHub account.
-
-Clone it to your machine:
+## Step 1: Clone and Install
 
 ```bash
-git clone https://github.com/YOUR_USER/loomwork.git my-site
+git clone https://github.com/danrichardson/loomwork.git my-site
 cd my-site
+git remote remove origin
 npm install
-```
-
-Run the dev server to make sure everything works:
-
-```bash
 npm run dev
 ```
 
@@ -41,89 +27,110 @@ You should see the site at `http://localhost:4321`.
 
 ## Step 2: Rebrand
 
-Open `src/site.config.ts` and change the name, tagline, description, nav items, and footer to match your project. This is the single file that controls the entire site's identity.
+Edit these two files:
 
-Then open `src/styles/global.css` and change the CSS variables under `:root` — colors, fonts, spacing. These cascade through every page automatically.
+**`src/site.config.ts`** — Change the name, tagline, description, nav items, footer, and email.
 
-## Step 3: Replace the Content
+**`src/styles/site.css`** — Override CSS variables for your colors and fonts:
 
-Delete the example pages in `src/content/pages/` and create your own `.mdx` files. Each file needs YAML frontmatter at the top:
+```css
+:root {
+  --color-accent: #2d6a4f;
+  --font-heading: "Bitter", Georgia, serif;
+}
+```
+
+## Step 3: Replace Content
+
+Delete the example pages in `src/content/pages/` and create your own `.mdx` files. Each needs YAML frontmatter:
 
 ```yaml
 ---
 title: "Your Page Title"
 description: "A short description for SEO."
 section: "docs"
-nav_order: 10
 template: "default"
 ---
 ```
 
-The file path becomes the URL. A file at `src/content/pages/docs/getting-started.mdx` renders at `/docs/getting-started`.
+The file path becomes the URL. `src/content/pages/docs/intro.mdx` → `/docs/intro`.
 
-## Step 4: Connect to Cloudflare
+## Step 4: Deploy to Cloudflare
 
-1. Push your changes to GitHub
-2. Go to **Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git**
-3. Select your forked repo
-4. Set the build settings:
+1. Create a new GitHub repo and push your site
+2. **Cloudflare Dashboard → Workers & Pages → Create → Connect to Git**
+3. Select your repo. Build settings:
    - **Build command:** `npm run build`
    - **Build output directory:** `dist`
-5. Click **Deploy**
+4. Deploy.
 
-<Callout type="tip" title="First deploy takes ~60 seconds">
-  Subsequent deploys after a git push are faster — usually under 30 seconds.
+<Callout type="tip" title="Custom domain">
+  Add your domain under Settings → Domains & Routes. If your DNS is on Cloudflare, it wires up automatically.
 </Callout>
 
-## Step 5: Add a Custom Domain
+## Step 5: The Daily Workflow
 
-In your Cloudflare Pages project, go to **Settings → Domains & Routes** and add your custom domain. If your domain's DNS is already on Cloudflare, it connects automatically. Otherwise, add a CNAME record pointing to your worker's `.workers.dev` URL.
-
-## The Authoring Workflow
-
-Once deployed, your day-to-day workflow is:
-
-1. Write or edit `.mdx` files in any text editor (Typora works great on Windows)
-2. Drop images alongside your content files
-3. Commit and push:
+From now on, your workflow is:
 
 ```bash
+# Edit content in your editor
 git add . && git commit -m "new post" && git push
 ```
 
-Cloudflare detects the push, builds, and deploys. Your changes are live in under a minute.
+Cloudflare auto-builds and deploys in ~30 seconds.
+
+## Staying Updated
+
+When Loomwork gets framework updates (layouts, components, build fixes), pull them into your site:
+
+```bash
+# One-time setup:
+git remote add loomwork https://github.com/danrichardson/loomwork.git
+
+# Pull updates:
+git fetch loomwork
+git merge loomwork/main
+```
+
+Framework files merge cleanly because you haven't edited them. Your site-specific files (`site.config.ts`, `site.css`, content pages, `wrangler.toml`, `index.astro`) won't conflict because loomwork only has template versions of those.
+
+## File Reference
+
+### Framework files (don't edit in your site repo)
+- `src/layouts/*` — Page layouts
+- `src/components/*` — Reusable components (Callout, YouTube, etc.)
+- `src/styles/global.css` — Base styles and CSS reset
+- `src/content.config.ts` — Content collection schemas
+- `src/pages/[...slug].astro` — Dynamic content route
+- `src/pages/404.astro` — Not found page
+
+### Site files (yours to customize)
+- `src/site.config.ts` — Name, nav, footer, fonts
+- `src/styles/site.css` — Color and font overrides
+- `src/pages/index.astro` — Homepage
+- `src/content/pages/*` — All your content
+- `astro.config.mjs` — Site URL
+- `wrangler.toml` — Cloudflare project name and routes
+- `package.json` — Project name
 
 ## Page Templates
 
-Loomwork includes four layout templates you can set in frontmatter:
-
-- **`default`** — Standard content page, centered at a comfortable reading width
-- **`landing`** — Wider layout with no sidebar, good for home pages
-- **`guide`** — Includes a sticky table of contents sidebar (like this page)
-- **`tool`** — Minimal chrome, wide container, designed for interactive components
+| Template  | Use for                    | Layout                        |
+| --------- | -------------------------- | ----------------------------- |
+| `default` | Standard content pages     | Centered, reading width       |
+| `landing` | Home/marketing pages       | Wide, no sidebar              |
+| `guide`   | Long-form guides           | Sticky TOC sidebar (like this)|
+| `tool`    | Interactive tools          | Minimal chrome, wide          |
 
 ## Using Components in MDX
 
-You can import Astro or React components directly in your content:
-
 ```mdx
 import Callout from '../../components/Callout.astro';
+import YouTube from '../../components/YouTube.astro';
 
 <Callout type="warning" title="Heads up">
-  This is a warning callout rendered inline in your markdown.
+  This is a warning callout.
 </Callout>
+
+<YouTube id="dQw4w9WgXcQ" title="Tutorial" />
 ```
-
-Built-in components include `Callout` (info, warning, tip, danger) and `YouTube` (responsive video embeds). Add your own to `src/components/`.
-
-## Adding Interactive Features
-
-For calculators, forms, or other interactive elements, create React components in `src/components/` and use Astro's island architecture:
-
-```astro
-import MyWidget from '../components/MyWidget';
-
-<MyWidget client:load />
-```
-
-The `client:load` directive hydrates the component on the client side. The rest of the page stays static HTML.

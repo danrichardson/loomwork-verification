@@ -2,146 +2,189 @@
 
 A content-first Astro starter for crafting sites by hand.
 
-**MDX + Content Collections + Cloudflare Pages.** Write in Typora, push to GitHub, auto-deploy in 30 seconds. Fork it, change one config file, and you have a new site.
+Write markdown. Push to GitHub. Live in 30 seconds.
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USER/loomwork.git my-site
+git clone https://github.com/danrichardson/loomwork.git my-site
 cd my-site
+git remote remove origin
 npm install
-npm run dev          # → http://localhost:4321
+npm run dev        # → http://localhost:4321
 ```
 
-## Rebranding for a New Project
+## Make It Yours
 
-1. Edit **`src/site.config.ts`** — name, tagline, nav, footer, email
-2. Edit **`src/styles/global.css`** `:root` variables — colors, fonts
-3. Update **`astro.config.mjs`** `site` URL
-4. Replace content in `src/content/pages/` with your own MDX
-5. Push → Cloudflare Pages auto-builds → live
+1. **`src/site.config.ts`** — Name, tagline, nav, footer, email, fonts
+2. **`src/styles/site.css`** — Override colors, fonts, spacing
+3. **`astro.config.mjs`** — Your site URL
+4. **`wrangler.toml`** — Cloudflare project name and custom domains
+5. Replace content in `src/content/pages/`
+6. Customize `src/pages/index.astro` (your homepage)
+7. Push to GitHub → connect to Cloudflare → live
 
 ## Project Structure
 
 ```
 src/
-├── site.config.ts           ★ The ONE file you change per project
-├── content.config.ts        Content Collection schemas
+├── site.config.ts         ← SITE FILE: name, nav, footer, fonts
+├── content.config.ts      ← FRAMEWORK: content collection schemas
+├── styles/
+│   ├── global.css         ← FRAMEWORK: base styles, reset, utilities
+│   └── site.css           ← SITE FILE: your color/font overrides
 ├── content/
-│   ├── pages/               Site pages (MDX). File path = URL.
-│   │   ├── about.mdx        → /about
-│   │   └── guides/
-│   │       └── system-1.mdx → /guides/system-1
-│   └── posts/               Blog posts (MDX). Date-driven.
-├── components/
-│   ├── Header.astro          Nav (reads from site.config)
-│   ├── Footer.astro          Footer (reads from site.config)
-│   ├── TableOfContents.astro Auto-generated TOC for guide pages
-│   ├── Callout.astro         Info/warning/tip boxes for MDX
-│   └── YouTube.astro         Responsive video embeds for MDX
-├── layouts/
-│   ├── Base.astro            HTML shell, meta tags, fonts
-│   └── Content.astro         Page chrome with template variants
-├── pages/
-│   ├── index.astro           Homepage
-│   ├── [...slug].astro       Dynamic route → renders content/pages
-│   └── 404.astro
-└── styles/
-    └── global.css            CSS variables, reset, base styles
+│   ├── pages/             ← SITE FILE: your MDX content
+│   └── posts/             ← SITE FILE: optional blog posts
+├── components/            ← FRAMEWORK: shared components
+├── layouts/               ← FRAMEWORK: page layouts
+└── pages/
+    ├── index.astro        ← SITE FILE: your homepage
+    ├── [...slug].astro    ← FRAMEWORK: renders content pages
+    └── 404.astro          ← FRAMEWORK: not found page
+```
+
+## Framework vs Site Files
+
+This matters if you want to pull framework updates from the loomwork repo.
+
+### Framework files — don't edit in your site repo
+
+| File | Purpose |
+|------|---------|
+| `src/layouts/Base.astro` | HTML shell, meta tags, font loading |
+| `src/layouts/Content.astro` | Content page chrome, template variants |
+| `src/components/*.astro` | Callout, YouTube, Header, Footer, TOC |
+| `src/styles/global.css` | Reset, base typography, utilities |
+| `src/content.config.ts` | Content collection schemas |
+| `src/pages/[...slug].astro` | Dynamic route for content pages |
+| `src/pages/404.astro` | Not found page |
+| `public/.assetsignore` | Cloudflare deploy fix |
+
+### Site files — yours to customize
+
+| File | Purpose |
+|------|---------|
+| `src/site.config.ts` | Site identity, navigation, fonts |
+| `src/styles/site.css` | CSS variable overrides, site-specific styles |
+| `src/pages/index.astro` | Homepage layout and content |
+| `src/content/pages/*.mdx` | All your site content |
+| `src/content/posts/*.mdx` | Blog posts (optional) |
+| `astro.config.mjs` | Site URL (change one line) |
+| `wrangler.toml` | Cloudflare project name and routes |
+| `package.json` | Project name |
+
+## Pulling Framework Updates
+
+Set up loomwork as an upstream remote (one-time):
+
+```bash
+git remote add loomwork https://github.com/danrichardson/loomwork.git
+```
+
+When loomwork gets updates:
+
+```bash
+git fetch loomwork
+git merge loomwork/main
+```
+
+Framework files merge cleanly because you haven't edited them. Site files won't conflict because loomwork only has placeholder versions.
+
+## Styling
+
+The styling system has two layers:
+
+**`global.css`** (framework) — Contains the CSS reset, base typography, component styles, and utility classes. All values reference CSS custom properties. Don't edit this in site repos.
+
+**`site.css`** (yours) — Override any CSS variable to rebrand:
+
+```css
+:root {
+  --color-accent:       #2d6a4f;
+  --color-accent-hover: #1b4332;
+  --color-accent-light: #d1fae5;
+  --font-heading: "Bitter", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+}
+
+/* Site-specific styles go here too */
+```
+
+To use Google Fonts, set `fonts_url` in `site.config.ts`:
+
+```typescript
+fonts_url: "https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap",
 ```
 
 ## Content Authoring
 
-### Writing Pages
+### Pages
 
-Create `.mdx` files in `src/content/pages/`. Every file needs YAML frontmatter:
+Create `.mdx` files in `src/content/pages/`. Frontmatter:
 
 ```yaml
 ---
-title: "My Page Title"
-description: "SEO description under 160 chars."
+title: "Page Title"
+description: "SEO description, max 160 chars."
 section: "guides"
 nav_order: 10
-template: "guide"           # default | landing | guide | tool
-tags: ["solar", "beginner"]
+template: "guide"     # default | landing | guide | tool
 draft: false
 ---
 ```
 
-### Using Components in MDX
+File path = URL: `src/content/pages/docs/intro.mdx` → `/docs/intro`
+
+### Components in MDX
 
 ```mdx
 import Callout from '../../components/Callout.astro';
-import YouTube from '../../components/YouTube.astro';
 
 <Callout type="tip" title="Pro tip">
-  Components work inline in your markdown content.
+  Components render inline in your markdown.
 </Callout>
-
-<YouTube id="dQw4w9WgXcQ" title="Important tutorial" />
 ```
 
-### Page Templates
+Available: `Callout` (info/warning/tip/danger), `YouTube` (video embeds).
 
-| Template  | Use for                    | Layout                        |
-| --------- | -------------------------- | ----------------------------- |
-| `default` | Standard content pages     | Centered, content-width       |
-| `landing` | Home/marketing pages       | Wide container, no sidebar    |
-| `guide`   | Long-form guides           | Sticky TOC sidebar on desktop |
-| `tool`    | Interactive tools          | Minimal chrome, wide          |
+### Templates
 
-### Typora Workflow
+- **`default`** — Centered content, comfortable reading width
+- **`landing`** — Wide container, no sidebar
+- **`guide`** — Sticky table of contents sidebar on desktop
+- **`tool`** — Minimal chrome for interactive React components
 
-1. Open `src/content/pages/` in Typora
-2. Write and edit `.mdx` files
-3. Drop images in the same folder or `src/assets/`
-4. `git add . && git commit -m "update" && git push`
-5. Cloudflare Pages auto-deploys (~30 seconds)
+## Deploy to Cloudflare
 
-## Deploy to Cloudflare Pages
-
-1. Push repo to GitHub
-2. Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
-3. Build settings:
-   - **Framework preset:** Astro
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-4. Deploy. Subsequent pushes auto-deploy.
+1. Push to GitHub
+2. Cloudflare Dashboard → Workers & Pages → Create → Connect to Git
+3. Build command: `npm run build` / Output: `dist`
+4. Add custom domains in Settings → Domains & Routes
 
 ## Adding React Islands
 
-For interactive components (calculators, tools), create `.tsx` files:
-
 ```tsx
-// src/components/LoadCalculator.tsx
+// src/components/Calculator.tsx
 import { useState } from "react";
-
-export default function LoadCalculator() {
-  const [watts, setWatts] = useState(0);
+export default function Calculator() {
+  const [val, setVal] = useState(0);
   return <div>...</div>;
 }
 ```
 
-Use with a client directive:
-
 ```astro
-import LoadCalculator from '../components/LoadCalculator';
-
-<LoadCalculator client:load />
+import Calculator from '../components/Calculator';
+<Calculator client:load />
 ```
 
-Options: `client:load` (immediate), `client:idle` (when idle), `client:visible` (when scrolled to).
+## Tech Stack
 
-## Extending
-
-- **New collection:** Add to `src/content.config.ts`, create folder in `src/content/`
-- **New layout:** Add to `src/layouts/`, reference via frontmatter `template`
-- **SSR routes:** Set `output: "server"` in `astro.config.mjs` (Cloudflare adapter pre-configured)
+- **Astro 5** — Static site generator with MDX and React islands
+- **Cloudflare Workers** — Free global hosting, auto-deploy from GitHub
+- **MDX** — Markdown with inline components
+- **Content Collections** — Schema-validated content with TypeScript
 
 ## License
 
-MIT
-
----
-
-*Loomwork is a [Throughline Technical Services](https://throughlinetechnical.com) project.*
+MIT — [Throughline Technical Services, LLC](https://throughlinetechnical.com)

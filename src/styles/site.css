@@ -1,0 +1,15 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SITE STYLES — Override Loomwork defaults here.
+   
+   This file is YOURS. Edit it freely. It won't conflict
+   with framework updates from the loomwork repo.
+   
+   Override any CSS variable from global.css:
+   
+   :root {
+     --color-accent: #2d6a4f;
+     --font-heading: "Bitter", Georgia, serif;
+   }
+   
+   Add site-specific styles below the overrides.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
