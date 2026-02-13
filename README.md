@@ -187,4 +187,4 @@ import Calculator from '../components/Calculator';
 
 ## License
 
-MIT — [Throughline Technical Services, LLC](https://throughlinetechnical.com)
+MIT — [Throughline Technical Services, LLC](https://www.throughlinetech.net)
