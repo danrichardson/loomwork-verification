@@ -18,6 +18,7 @@ import {
   listFilesRecursive,
   getFile,
   putFile,
+  commitFilesBatch,
 } from "./github";
 import type { RepoFile, FileContent } from "./github";
 import { parseFile, serializeFile, renderMarkdown, getTitle } from "./mdx";
@@ -27,6 +28,11 @@ import "./mobile.css";
 
 type Screen = "login" | "browser" | "editor";
 type EditorTab = "edit" | "preview" | "frontmatter";
+
+interface PendingImage {
+  repoPath: string;
+  base64: string;
+}
 
 interface AppState {
   screen: Screen;
@@ -44,6 +50,8 @@ interface AppState {
   showCommit: boolean;
   commitMessage: string;
   committing: boolean;
+  uploadingImage: boolean;
+  pendingImages: PendingImage[];
 }
 
 // ── Component ────────────────────────────────────────────
@@ -71,6 +79,8 @@ export function MobileApp({
     showCommit: false,
     commitMessage: "",
     committing: false,
+    uploadingImage: false,
+    pendingImages: [],
   });
 
   const set = useCallback(
@@ -183,6 +193,7 @@ export function MobileApp({
         dirty,
         loading: false,
         commitMessage: `Update ${file.name}`,
+        pendingImages: [],
       });
     } catch (e: any) {
       set({ error: e.message, loading: false });
@@ -209,30 +220,94 @@ export function MobileApp({
     set({ committing: true, error: null });
     try {
       const content = serializeFile(state.frontmatter, state.body);
-      const result = await putFile(
-        state.creds.token,
-        state.creds.owner,
-        state.creds.repo,
-        state.currentFile.path,
-        content,
-        state.commitMessage,
-        state.currentSha || undefined
-      );
+      let result;
+
+      if (state.pendingImages.length > 0) {
+        const batchFiles = [
+          ...state.pendingImages.map((img) => ({
+            path: img.repoPath,
+            contentBase64: img.base64,
+          })),
+          {
+            path: state.currentFile.path,
+            contentBase64: toBase64Utf8(content),
+          },
+        ];
+
+        result = await commitFilesBatch(
+          state.creds.token,
+          state.creds.owner,
+          state.creds.repo,
+          "main",
+          state.commitMessage,
+          batchFiles
+        );
+      } else {
+        result = await putFile(
+          state.creds.token,
+          state.creds.owner,
+          state.creds.repo,
+          state.currentFile.path,
+          content,
+          state.commitMessage,
+          state.currentSha || undefined
+        );
+      }
+
       // Clear draft
       await import("./storage").then(({ removeDraft }) =>
         removeDraft(state.currentFile!.path)
       );
+
+      const refreshed = await getFile(
+        state.creds.token,
+        state.creds.owner,
+        state.creds.repo,
+        state.currentFile.path
+      );
+
       set({
-        currentSha: result.sha,
+        currentSha: refreshed.sha,
         dirty: false,
         showCommit: false,
         committing: false,
+        pendingImages: [],
         success: `Committed! Cloudflare will deploy shortly.`,
       });
       // Clear success after a few seconds
       setTimeout(() => set({ success: null }), 5000);
     } catch (e: any) {
       set({ error: e.message, committing: false });
+    }
+  }
+
+  // ── Upload image + insert markdown ────────────────────
+  async function handleImagePick(file: File) {
+    if (!state.currentFile) return;
+    if (!file.type.startsWith("image/")) {
+      set({ error: "Please choose an image file." });
+      return;
+    }
+
+    set({ uploadingImage: true, error: null });
+    try {
+      const base64 = await fileToBase64(file);
+      const ext = getImageExtension(file);
+      const baseName = sanitizeFilename(file.name.replace(/\.[^.]+$/, "")) || "image";
+      const fileName = `${Date.now()}-${baseName}.${ext}`;
+      const repoPath = `public/images/${fileName}`;
+
+      const imageMarkdown = `\n![${baseName}](/images/${fileName})\n`;
+      set({
+        body: `${state.body}${imageMarkdown}`,
+        dirty: true,
+        uploadingImage: false,
+        pendingImages: [...state.pendingImages, { repoPath, base64 }],
+        success: `Image queued: /images/${fileName}`,
+      });
+      setTimeout(() => set({ success: null }), 5000);
+    } catch (e: any) {
+      set({ error: e.message || "Failed to prepare image.", uploadingImage: false });
     }
   }
 
@@ -246,10 +321,16 @@ export function MobileApp({
       frontmatter: {},
       dirty: false,
       editorTab: "edit",
+      pendingImages: [],
       error: null,
       success: null,
     });
     if (state.creds) loadFiles(state.creds);
+  }
+
+  // ── Full app reload (PWA-friendly) ────────────────────
+  function reloadApp() {
+    window.location.reload();
   }
 
   // ── Render ─────────────────────────────────────────────
@@ -298,6 +379,9 @@ export function MobileApp({
               <button className="m-btn--icon" onClick={() => state.creds && loadFiles(state.creds)} title="Refresh">
                 ↻
               </button>
+              <button className="m-btn--icon" onClick={reloadApp} title="Reload app">
+                ⟲
+              </button>
               <button className="m-btn--icon" onClick={handleLogout} title="Sign out">
                 ⏻
               </button>
@@ -328,8 +412,16 @@ export function MobileApp({
               {state.dirty && (
                 <span style={{ color: "var(--m-accent)", fontSize: "0.75rem" }}>●</span>
               )}
+              {state.pendingImages.length > 0 && (
+                <span style={{ color: "var(--m-text-muted)", fontSize: "0.75rem" }}>
+                  {state.pendingImages.length} img
+                </span>
+              )}
             </div>
             <div className="m-header__actions">
+              <button className="m-btn--icon" onClick={reloadApp} title="Reload app">
+                ⟲
+              </button>
               <button
                 className="m-btn m-btn--primary m-btn--small"
                 disabled={!state.dirty}
@@ -346,6 +438,8 @@ export function MobileApp({
             onTabChange={(tab) => set({ editorTab: tab })}
             onBodyChange={(body) => set({ body, dirty: true })}
             onFrontmatterChange={(fm) => set({ frontmatter: fm, dirty: true })}
+            onPickImage={handleImagePick}
+            uploadingImage={state.uploadingImage}
             filePath={state.currentFile.path}
             siteUrl={siteUrl}
           />
@@ -504,6 +598,8 @@ function Editor({
   onTabChange,
   onBodyChange,
   onFrontmatterChange,
+  onPickImage,
+  uploadingImage,
   filePath,
   siteUrl,
 }: {
@@ -513,9 +609,23 @@ function Editor({
   onTabChange: (tab: EditorTab) => void;
   onBodyChange: (body: string) => void;
   onFrontmatterChange: (fm: Record<string, any>) => void;
+  onPickImage: (file: File) => void;
+  uploadingImage: boolean;
   filePath: string;
   siteUrl: string;
 }) {
+  function triggerImagePicker() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.capture = "environment";
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (file) onPickImage(file);
+    };
+    input.click();
+  }
+
   // Derive the live URL from the file path
   const slug = filePath
     .replace(/^src\/content\/pages\//, "")
@@ -537,17 +647,29 @@ function Editor({
             </button>
           ))}
         </div>
-        {liveUrl && (
-          <a
-            href={liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="m-btn--icon"
-            title="View live"
-          >
-            ↗
-          </a>
-        )}
+        <div className="m-editor__toolbar-group">
+          {tab === "edit" && (
+            <button
+              className="m-btn--icon"
+              title="Add image"
+              onClick={triggerImagePicker}
+              disabled={uploadingImage}
+            >
+              {uploadingImage ? "⏳" : "🖼️"}
+            </button>
+          )}
+          {liveUrl && (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="m-btn--icon"
+              title="View live"
+            >
+              ↗
+            </a>
+          )}
+        </div>
       </div>
 
       {tab === "edit" && (
@@ -578,6 +700,54 @@ function Editor({
       )}
     </div>
   );
+}
+
+function sanitizeFilename(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function getImageExtension(file: File): string {
+  const byMime: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif",
+    "image/heic": "heic",
+    "image/heif": "heif",
+  };
+  if (byMime[file.type]) return byMime[file.type];
+
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  return ext && /^[a-z0-9]+$/.test(ext) ? ext : "jpg";
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Failed to read image file."));
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result !== "string") {
+        reject(new Error("Unexpected file read result."));
+        return;
+      }
+      const base64 = result.split(",")[1];
+      if (!base64) {
+        reject(new Error("Failed to encode image."));
+        return;
+      }
+      resolve(base64);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function toBase64Utf8(content: string): string {
+  return btoa(unescape(encodeURIComponent(content)));
 }
 
 // ── Frontmatter Form ─────────────────────────────────────

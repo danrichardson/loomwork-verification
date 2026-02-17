@@ -21,6 +21,7 @@ export const SITE = {
   nav: [
     { label: "About", href: "/about_Loomwork" },
     { label: "Deploy Guide", href: "/guide" },
+    { label: "Mobile App", href: "/mobile-app" },
   ],
 
   // ── Fonts ───────────────────────────────────────────────
