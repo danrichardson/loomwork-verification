@@ -111,7 +111,8 @@ export async function getFile(
   );
   if (!res.ok) throw new Error(`Failed to get ${path}: ${res.status}`);
   const data = await res.json();
-  const content = atob(data.content.replace(/\n/g, ""));
+  const bytes = Uint8Array.from(atob(data.content.replace(/\n/g, "")), c => c.charCodeAt(0));
+  const content = new TextDecoder().decode(bytes);
   return {
     content,
     sha: data.sha,
