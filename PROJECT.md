@@ -1,8 +1,8 @@
-# Loomwork Mobile — Project Description
+# Loomwork Mobile - Project Description
 
 ## Overview
 
-**Loomwork Mobile** is a Progressive Web App (PWA) that serves as a mobile content editor for sites built with [Loomwork](https://github.com/danrichardson/loomwork), the open-source Astro-based web publishing framework. It lets site owners create, edit, and publish MDX content directly from their phone or tablet — no laptop, no terminal, no app store required.
+**Loomwork Mobile** is a Progressive Web App (PWA) that serves as a mobile content editor for sites built with [Loomwork](https://github.com/danrichardson/loomwork), the open-source Astro-based web publishing framework. It lets site owners create, edit, and publish MDX content directly from their phone or tablet - no laptop, no terminal, no app store required.
 
 The app talks directly to the **GitHub API** to read and commit content files, and Cloudflare handles deployment automatically on push. No custom server infrastructure is needed.
 
@@ -10,7 +10,7 @@ Loomwork Mobile lives **inside the Loomwork repo** as a framework file. Every Lo
 
 ## Core Problem
 
-Loomwork sites are managed by editing MDX files in a git repo and pushing to GitHub. This workflow requires a computer with a code editor and git CLI. Loomwork Mobile removes that friction — letting site owners write and publish from anywhere using their phone.
+Loomwork sites are managed by editing MDX files in a git repo and pushing to GitHub. This workflow requires a computer with a code editor and git CLI. Loomwork Mobile removes that friction - letting site owners write and publish from anywhere using their phone.
 
 ## Target User
 
@@ -20,14 +20,14 @@ A **site owner/author** who runs one or more Loomwork-powered sites and wants to
 
 ### Where It Lives
 
-Loomwork Mobile is **bundled inside the Loomwork repo** as a framework directory (e.g., `packages/mobile/` or `src/mobile/`). It is a framework file — users don't edit it, and upstream updates merge cleanly via the existing `git fetch loomwork && git merge loomwork/main` workflow.
+Loomwork Mobile is **bundled inside the Loomwork repo** as a framework directory (e.g., `packages/mobile/` or `src/mobile/`). It is a framework file - users don't edit it, and upstream updates merge cleanly via the existing `git fetch loomwork && git merge loomwork/main` workflow.
 
 This means:
-- **Every forked Loomwork site includes the mobile editor** — zero extra setup
-- **Schema sync is automatic** — the editor and the content schemas live in the same repo
-- **Updates flow through the existing mechanism** — `git merge loomwork/main` updates both the framework and the mobile editor in one step
-- **Accessible at a site route** — e.g., `yoursite.com/mobile` or `yoursite.com/admin`
-- **Deployed on Cloudflare Pages** alongside the site itself — no separate hosting
+- **Every forked Loomwork site includes the mobile editor** - zero extra setup
+- **Schema sync is automatic** - the editor and the content schemas live in the same repo
+- **Updates flow through the existing mechanism** - `git merge loomwork/main` updates both the framework and the mobile editor in one step
+- **Accessible at a site route** - e.g., `yoursite.com/mobile` or `yoursite.com/admin`
+- **Deployed on Cloudflare Pages** alongside the site itself - no separate hosting
 
 ### How the PWA Updates
 
@@ -39,13 +39,13 @@ The mobile app does **not** hardcode Loomwork's content schema. Instead:
 
 1. A **build-time script** reads `src/content.config.ts` (the Zod schemas) and generates a `loomwork.schema.json` manifest describing every collection, field, type, constraints (max length, required, enum values, defaults, etc.)
 2. The mobile app reads this JSON at runtime and **dynamically generates the frontmatter form**
-3. When someone adds a field to `content.config.ts`, the next build regenerates the manifest, and the form automatically includes the new field — **zero mobile app code changes required**
+3. When someone adds a field to `content.config.ts`, the next build regenerates the manifest, and the form automatically includes the new field - **zero mobile app code changes required**
 
 This is the same pattern used by headless CMS tools like Decap CMS and TinaCMS. It makes the mobile editor resilient to any schema evolution in Loomwork.
 
 ### Multi-Site Consideration
 
-Since each site has its own bundled editor, managing multiple sites means bookmarking each site's editor URL (e.g., `site-a.com/mobile`, `site-b.com/mobile`). The editor still uses GitHub PAT auth per-site. In the future, a thin "site switcher" PWA could wrap multiple instances, but for v1 this is sufficient — site owners rarely manage more than a few sites.
+Since each site has its own bundled editor, managing multiple sites means bookmarking each site's editor URL (e.g., `site-a.com/mobile`, `site-b.com/mobile`). The editor still uses GitHub PAT auth per-site. In the future, a thin "site switcher" PWA could wrap multiple instances, but for v1 this is sufficient - site owners rarely manage more than a few sites.
 
 ## Platform & Tech Stack
 
@@ -114,7 +114,7 @@ Since each site has its own bundled editor, managing multiple sites means bookma
 
 **No custom backend.** The PWA communicates directly with GitHub's API using the user's PAT. The schema manifest is a static JSON file served alongside the PWA.
 
-## Features — v1 (MVP)
+## Features - v1 (MVP)
 
 ### 1. Setup & Authentication
 - On first visit to `/mobile`, prompt for a **GitHub Personal Access Token** with repo scope
@@ -130,13 +130,13 @@ Since each site has its own bundled editor, managing multiple sites means bookma
 
 ### 3. Content Editor
 - **Markdown text editor** with syntax highlighting (using CodeMirror or a lightweight alternative)
-- **Dynamic frontmatter form** — generated at runtime from `loomwork.schema.json`; automatically adapts when schema fields are added/changed
+- **Dynamic frontmatter form** - generated at runtime from `loomwork.schema.json`; automatically adapts when schema fields are added/changed
 - **Auto-save drafts** locally in IndexedDB (offline-capable)
 - Create new pages and posts from templates
 
 ### 4. Preview
-- **In-app Markdown preview** — rendered view of the content using `react-markdown` with remark-gfm
-- **Live site link** — button to open the corresponding URL on the deployed site
+- **In-app Markdown preview** - rendered view of the content using `react-markdown` with remark-gfm
+- **Live site link** - button to open the corresponding URL on the deployed site
 - Side-by-side or toggle between edit and preview modes
 
 ### 5. Publish (Commit & Push)
@@ -147,17 +147,17 @@ Since each site has its own bundled editor, managing multiple sites means bookma
 
 ### 6. PWA Capabilities
 - Installable to home screen (iOS & Android)
-- Offline draft editing — sync when back online
+- Offline draft editing - sync when back online
 - Responsive design optimized for mobile, works on tablet/desktop too
 
-## Features — Future (v2+)
+## Features - Future (v2+)
 
 These are out of scope for v1 but the architecture should not prevent them:
 
 | Feature | Description |
 |---------|-------------|
-| **Site config editor** | Edit `site.config.ts` — name, tagline, nav items, footer, fonts |
-| **Theme/CSS editor** | Edit `site.css` — color picker for CSS variables, font selector |
+| **Site config editor** | Edit `site.config.ts` - name, tagline, nav items, footer, fonts |
+| **Theme/CSS editor** | Edit `site.css` - color picker for CSS variables, font selector |
 | **Deploy status** | Poll Cloudflare API for build/deploy status |
 | **Branch workflows** | Create feature branches, preview deploys, merge |
 | **Image upload** | Upload images to `public/` or an external CDN, insert into content |
@@ -215,27 +215,27 @@ These schemas (from `src/content.config.ts`) are the source of truth. At build t
 ## Key Design Decisions
 
 ### Why bundle in the Loomwork repo?
-- **Zero sync problem** — content schemas and the editor live in the same repo
-- **Follows the existing update model** — `git merge loomwork/main` updates both framework and editor
-- **Every fork includes it** — no separate install, no extra hosting
-- **Deploys automatically** — Cloudflare builds the site + editor together
-- **Framework file semantics** — users don't edit it, upstream merges are clean
+- **Zero sync problem** - content schemas and the editor live in the same repo
+- **Follows the existing update model** - `git merge loomwork/main` updates both framework and editor
+- **Every fork includes it** - no separate install, no extra hosting
+- **Deploys automatically** - Cloudflare builds the site + editor together
+- **Framework file semantics** - users don't edit it, upstream merges are clean
 
 ### Why PWA over native?
 - No app store approval process or fees
 - Instant updates (no app store review cycle)
 - Shares TypeScript/React with Loomwork's own tech stack
 - Works on iOS, Android, and desktop from a single codebase
-- Hosted alongside the site on Cloudflare Pages — no separate infrastructure
+- Hosted alongside the site on Cloudflare Pages - no separate infrastructure
 
 ### Why PAT over OAuth?
-- **Zero server infrastructure** — OAuth requires a backend to securely exchange tokens (client_secret can't live in frontend code)
+- **Zero server infrastructure** - OAuth requires a backend to securely exchange tokens (client_secret can't live in frontend code)
 - PATs with fine-grained permissions can be scoped to specific repos
 - Simple UX: user creates a PAT on GitHub, pastes it into the app once
 - Migration path: add OAuth later via a small Cloudflare Worker
 
 ### Why commit directly vs. draft PRs?
-- v1 targets single-author sites — the owner is the only committer
+- v1 targets single-author sites - the owner is the only committer
 - Direct commits to `main` match Loomwork's existing workflow (`git push` → auto-deploy)
 - Branch/PR workflows can be added in v2 for team scenarios
 
@@ -298,12 +298,12 @@ loomwork/                              # ← the main Loomwork repo
 │   └── generate-schema.ts             # Reads content.config.ts → loomwork.schema.json
 ├── astro.config.mjs
 ├── package.json
-└── loomwork.schema.json               # Generated artifact — committed to repo
+└── loomwork.schema.json               # Generated artifact - committed to repo
 ```
 
 ## Hosting
 
-The mobile editor is deployed **alongside the site** on Cloudflare Pages. The Astro build config routes `/mobile/*` to the PWA's built output. No separate hosting, no extra cost — it's part of the same Cloudflare Pages deployment.
+The mobile editor is deployed **alongside the site** on Cloudflare Pages. The Astro build config routes `/mobile/*` to the PWA's built output. No separate hosting, no extra cost - it's part of the same Cloudflare Pages deployment.
 
 ## Success Criteria (v1)
 

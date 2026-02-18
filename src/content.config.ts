@@ -1,8 +1,8 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// CONTENT COLLECTIONS — FRAMEWORK FILE
+// CONTENT COLLECTIONS - FRAMEWORK FILE
 //
 // This file defines the schema for content collections.
-// Do NOT edit in site repos — changes come from loomwork.
+// Do NOT edit in site repos - changes come from loomwork.
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 import { defineCollection, z } from "astro:content";
@@ -48,7 +48,7 @@ const pages = defineCollection({
 
 // ── POSTS ───────────────────────────────────────────────────
 // Blog / news / updates. Date-driven, reverse-chronological.
-// Optional — delete src/content/posts/ if you don't need it.
+// Optional - delete src/content/posts/ if you don't need it.
 //
 const posts = defineCollection({
   type: "content",

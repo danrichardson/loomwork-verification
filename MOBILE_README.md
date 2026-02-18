@@ -1,4 +1,4 @@
-# Loomwork Mobile — Quick Start
+# Loomwork Mobile - Quick Start
 
 Loomwork Mobile is the built-in PWA editor served at `/mobile`.
 

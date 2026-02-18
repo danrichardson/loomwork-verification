@@ -1,5 +1,5 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// GITHUB SERVICE — Talks to GitHub REST API via PAT
+// GITHUB SERVICE - Talks to GitHub REST API via PAT
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 const API = "https://api.github.com";

@@ -22,7 +22,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, SITE.url);
-const pageTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+const pageTitle = title === SITE.name ? title : `${title} - ${SITE.name}`;
 const fontsUrl = SITE.fonts_url || "";
 ---
 
@@ -46,7 +46,7 @@ const fontsUrl = SITE.fonts_url || "";
     <meta property="og:url" content={canonicalURL} />
     {og_image && <meta property="og:image" content={new URL(og_image, SITE.url)} />}
 
-    <!-- Fonts (optional — set fonts_url in site.config.ts) -->
+    <!-- Fonts (optional - set fonts_url in site.config.ts) -->
     {fontsUrl && (
       <>
         <link rel="preconnect" href="https://fonts.googleapis.com" />

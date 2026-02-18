@@ -1,5 +1,5 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ASTRO CONFIG — SITE-SPECIFIC FILE
+// ASTRO CONFIG - SITE-SPECIFIC FILE
 //
 // Change `site` to your domain. The rest should rarely
 // need changing unless you're adding integrations.

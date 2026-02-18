@@ -1,10 +1,10 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SITE CONFIG — SITE-SPECIFIC FILE
+// SITE CONFIG - SITE-SPECIFIC FILE
 //
 // This file is YOURS. Edit it freely. It won't conflict
 // with framework updates from the loomwork repo.
 //
-// Everything site-specific — name, nav, branding — lives here.
+// Everything site-specific - name, nav, branding - lives here.
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 export const SITE = {

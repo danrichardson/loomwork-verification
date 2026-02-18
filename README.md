@@ -16,10 +16,10 @@ npm run dev        # → http://localhost:4321
 
 ## Make It Yours
 
-1. **`src/site.config.ts`** — Name, tagline, nav, footer, email, fonts
-2. **`src/styles/site.css`** — Override colors, fonts, spacing
-3. **`astro.config.mjs`** — Your site URL
-4. **`wrangler.toml`** — Cloudflare project name and custom domains
+1. **`src/site.config.ts`** - Name, tagline, nav, footer, email, fonts
+2. **`src/styles/site.css`** - Override colors, fonts, spacing
+3. **`astro.config.mjs`** - Your site URL
+4. **`wrangler.toml`** - Cloudflare project name and custom domains
 5. Replace content in `src/content/pages/`
 6. Customize `src/pages/index.astro` (your homepage)
 7. Push to GitHub → connect to Cloudflare → live
@@ -48,7 +48,7 @@ src/
 
 This matters if you want to pull framework updates from the loomwork repo.
 
-### Framework files — don't edit in your site repo
+### Framework files - don't edit in your site repo
 
 | File | Purpose |
 |------|---------|
@@ -61,7 +61,7 @@ This matters if you want to pull framework updates from the loomwork repo.
 | `src/pages/404.astro` | Not found page |
 | `public/.assetsignore` | Cloudflare deploy fix |
 
-### Site files — yours to customize
+### Site files - yours to customize
 
 | File | Purpose |
 |------|---------|
@@ -95,9 +95,9 @@ Framework files merge cleanly because you haven't edited them. Site files won't 
 
 The styling system has two layers:
 
-**`global.css`** (framework) — Contains the CSS reset, base typography, component styles, and utility classes. All values reference CSS custom properties. Don't edit this in site repos.
+**`global.css`** (framework) - Contains the CSS reset, base typography, component styles, and utility classes. All values reference CSS custom properties. Don't edit this in site repos.
 
-**`site.css`** (yours) — Override any CSS variable to rebrand:
+**`site.css`** (yours) - Override any CSS variable to rebrand:
 
 ```css
 :root {
@@ -150,10 +150,10 @@ Available: `Callout` (info/warning/tip/danger), `YouTube` (video embeds).
 
 ### Templates
 
-- **`default`** — Centered content, comfortable reading width
-- **`landing`** — Wide container, no sidebar
-- **`guide`** — Sticky table of contents sidebar on desktop
-- **`tool`** — Minimal chrome for interactive React components
+- **`default`** - Centered content, comfortable reading width
+- **`landing`** - Wide container, no sidebar
+- **`guide`** - Sticky table of contents sidebar on desktop
+- **`tool`** - Minimal chrome for interactive React components
 
 ## Deploy to Cloudflare
 
@@ -180,11 +180,11 @@ import Calculator from '../components/Calculator';
 
 ## Tech Stack
 
-- **Astro 5** — Static site generator with MDX and React islands
-- **Cloudflare Workers** — Free global hosting, auto-deploy from GitHub
-- **MDX** — Markdown with inline components
-- **Content Collections** — Schema-validated content with TypeScript
+- **Astro 5** - Static site generator with MDX and React islands
+- **Cloudflare Workers** - Free global hosting, auto-deploy from GitHub
+- **MDX** - Markdown with inline components
+- **Content Collections** - Schema-validated content with TypeScript
 
 ## License
 
-MIT — [Throughline Technical Services, LLC](https://www.throughlinetech.net)
+MIT - [Throughline Technical Services, LLC](https://www.throughlinetech.net)
