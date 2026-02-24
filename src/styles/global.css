@@ -186,11 +186,19 @@ hr {
 }
 
 /* ── Tables ──────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-block-end: var(--space-lg);
+}
 table {
   width: 100%;
   border-collapse: collapse;
   margin-block-end: var(--space-lg);
   font-size: var(--text-sm);
+}
+.table-wrap table {
+  margin-block-end: 0;
 }
 th, td {
   padding: var(--space-sm) var(--space-md);
@@ -210,6 +218,12 @@ th {
 }
 .container--wide { max-width: var(--wide-width); }
 .container--full { max-width: var(--full-width); }
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: var(--space-md);
+  }
+}
 
 /* ── Text utilities ──────────────────────────────────────── */
 .sr-only {
@@ -249,4 +263,21 @@ th {
 }
 .btn--secondary:hover {
   background: var(--color-border);
+}
+
+/* ── Mobile typography ───────────────────────────────────── */
+@media (max-width: 480px) {
+  h1 {
+    font-size: var(--text-2xl);
+  }
+  h2 {
+    font-size: var(--text-xl);
+  }
+  h3 {
+    font-size: var(--text-lg);
+  }
+  pre {
+    padding: var(--space-md);
+    font-size: 0.8rem;
+  }
 }
