@@ -153,4 +153,21 @@ const containerClass = isLanding || isTool
     border-radius: var(--radius);
     margin-block: var(--space-lg);
   }
+
+  /* Mobile: scrollable tables in prose content */
+  .prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 480px) {
+    .page__header {
+      padding-block-start: var(--space-lg);
+      padding-block-end: var(--space-md);
+    }
+    .prose :global(.callout) {
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
 </style>

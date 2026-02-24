@@ -152,5 +152,18 @@ const currentPath = Astro.url.pathname;
     }
     .site-header__nav.is-open { display: block; }
     .site-header__nav ul { flex-direction: column; }
+    .site-header__link {
+      font-size: 1rem;
+      padding: var(--space-xs) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header__inner {
+      padding-inline: var(--space-md);
+    }
+    .site-header__nav {
+      padding: var(--space-md);
+    }
   }
 </style>
