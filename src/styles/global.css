@@ -79,6 +79,7 @@ body {
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ── Links ───────────────────────────────────────────────── */
@@ -196,6 +197,8 @@ table {
   border-collapse: collapse;
   margin-block-end: var(--space-lg);
   font-size: var(--text-sm);
+  overflow-x: auto;
+  display: block;
 }
 .table-wrap table {
   margin-block-end: 0;
