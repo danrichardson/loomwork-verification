@@ -11,6 +11,7 @@ git clone https://github.com/danrichardson/loomwork.git my-site
 cd my-site
 git remote remove origin
 git remote add origin https://github.com/YOUR-USER/YOUR-SITE.git
+git remote add loomwork https://github.com/danrichardson/loomwork.git
 npm install
 npm run dev        # → http://localhost:4321
 ```
