@@ -139,10 +139,8 @@ const containerClass = isLanding || isTool
   }
 
   /* Prose - styles for rendered MDX content */
-  .prose :global(h2) { margin-block-start: var(--space-2xl); }
-  .prose :global(h3) { margin-block-start: var(--space-xl); }
-  :global(.prose hr + h2) { margin-block-start: 0; padding-block-start: 0; }
-  :global(.prose hr + h3) { margin-block-start: 0; }
+  :global(.prose h2:first-child),
+  :global(.prose h3:first-child) { margin-block-start: 0; padding-block-start: 0; }
   .prose :global(img) {
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
