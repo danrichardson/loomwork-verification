@@ -19,6 +19,8 @@ You need three things: a **GitHub account** (free), a **Cloudflare account** (fr
 git clone https://github.com/danrichardson/loomwork.git my-site
 cd my-site
 git remote remove origin
+git remote add origin https://github.com/YOUR-USER/YOUR-SITE.git
+git remote add loomwork https://github.com/danrichardson/loomwork.git
 npm install
 npm run dev
 ```
@@ -55,6 +57,12 @@ template: "default"
 
 The file path becomes the URL. `src/content/pages/docs/intro.mdx` → `/docs/intro`.
 
+Also create your own project README:
+
+```bash
+echo "# My Site" > README.md
+```
+
 ## Step 4: Deploy to Cloudflare
 
 1. Create a new GitHub repo and push your site
@@ -84,10 +92,6 @@ Cloudflare auto-builds and deploys in ~30 seconds.
 When Loomwork gets framework updates (layouts, components, build fixes), pull them into your site:
 
 ```bash
-# One-time setup:
-git remote add loomwork https://github.com/danrichardson/loomwork.git
-
-# Pull updates:
 git fetch loomwork
 git merge loomwork/main
 ```
@@ -112,6 +116,7 @@ Framework files merge cleanly because you haven't edited them. Your site-specifi
 - `astro.config.mjs` - Site URL
 - `wrangler.toml` - Cloudflare project name and routes
 - `package.json` - Project name
+- `README.md` - Your project README (not provided by loomwork)
 
 ## Page Templates
 
