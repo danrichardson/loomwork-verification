@@ -22,3 +22,6 @@ Thumbs.db
 
 # site dependent config
 src/site.config.ts
+
+# Claude
+.claude/
