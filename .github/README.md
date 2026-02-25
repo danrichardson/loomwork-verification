@@ -4,6 +4,8 @@ A content-first Astro starter for crafting sites by hand.
 
 Write markdown. Push to GitHub. Live in 30 seconds.
 
+> **Note:** This file lives in `.github/README.md` rather than the repository root. This is intentional — it prevents merge conflicts when site repos pull framework updates, since every site has its own root `README.md`.
+
 ## Quick Start
 
 ```bash
@@ -33,6 +35,12 @@ rm src/content/pages/about_Loomwork.mdx
 rm src/content/pages/guide.mdx
 rm src/content/pages/mobile-app.mdx
 rm public/images/1771364152056-image.jpg
+```
+
+Then create your own project README:
+
+```bash
+echo "# My Site" > README.md
 ```
 
 ## Make It Yours
@@ -94,6 +102,7 @@ This matters if you want to pull framework updates from the loomwork repo.
 | `astro.config.mjs` | Site URL (change one line) |
 | `wrangler.toml` | Cloudflare project name and routes |
 | `package.json` | Project name |
+| `README.md` | Your project README (not provided by loomwork) |
 
 ## Pulling Framework Updates
 
