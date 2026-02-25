@@ -65,12 +65,15 @@ src/
 ├── content/
 │   ├── pages/             ← SITE FILE: your MDX content
 │   └── posts/             ← SITE FILE: optional blog posts
-├── components/            ← FRAMEWORK: shared components
+├── components/
+│   ├── *.astro            ← FRAMEWORK: shared components
+│   └── mobile/            ← FRAMEWORK: mobile editor components
 ├── layouts/               ← FRAMEWORK: page layouts
 └── pages/
     ├── index.astro        ← SITE FILE: your homepage
     ├── [...slug].astro    ← FRAMEWORK: renders content pages
-    └── 404.astro          ← FRAMEWORK: not found page
+    ├── 404.astro          ← FRAMEWORK: not found page
+    └── mobile/            ← FRAMEWORK: mobile editor PWA
 ```
 
 ## Framework vs Site Files
@@ -84,10 +87,12 @@ This matters if you want to pull framework updates from the loomwork repo.
 | `src/layouts/Base.astro` | HTML shell, meta tags, font loading |
 | `src/layouts/Content.astro` | Content page chrome, template variants |
 | `src/components/*.astro` | Callout, YouTube, Header, Footer, TOC |
+| `src/components/mobile/` | Mobile editor React components |
 | `src/styles/global.css` | Reset, base typography, utilities |
 | `src/content.config.ts` | Content collection schemas |
 | `src/pages/[...slug].astro` | Dynamic route for content pages |
 | `src/pages/404.astro` | Not found page |
+| `src/pages/mobile/` | Mobile editor PWA page (served at `/mobile`) |
 | `public/.assetsignore` | Cloudflare deploy fix |
 
 ### Site files - yours to customize
@@ -120,6 +125,12 @@ git merge loomwork/main
 ```
 
 Framework files merge cleanly because you haven't edited them. Site files won't conflict because loomwork only has placeholder versions.
+
+## Mobile Editor
+
+Loomwork includes a built-in PWA at `/mobile` that lets you edit and create content pages directly from a phone, committing changes to GitHub without a desktop. It is a framework feature — **do not delete** `src/pages/mobile/` or `src/components/mobile/` when cleaning up loomwork placeholder files.
+
+The content page `src/content/pages/mobile-app.mdx` is a placeholder and should be deleted. The mobile editor itself lives in `src/pages/mobile/` and is separate from your site content.
 
 ## Styling
 
