@@ -18,9 +18,44 @@ import { SITE } from "../site.config";
       <p class="hero__description">{SITE.description}</p>
 
       <div class="hero__actions">
-        {SITE.nav.map((item) => (
-          <a href={item.href} class="btn btn--secondary">{item.label}</a>
-        ))}
+        <a href="/recipes" class="btn btn--primary">Browse Recipes</a>
+        <a href="/about" class="btn btn--secondary">About Us</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-features">
+    <div class="container container--wide">
+      <h2 class="section-features__heading">Explore Coastal Kitchen</h2>
+      <div class="features">
+        <a href="/recipes" class="feature-card">
+          <span class="feature-card__icon">🦞</span>
+          <div class="feature-card__title">Recipes</div>
+          <p class="feature-card__desc">
+            Seafood dishes from simple weeknight grills to weekend showstoppers — clams, salmon, oysters, and more.
+          </p>
+        </a>
+        <a href="/techniques" class="feature-card">
+          <span class="feature-card__icon">🔪</span>
+          <div class="feature-card__title">Techniques</div>
+          <p class="feature-card__desc">
+            Master coastal cooking skills: grilling fish, shucking oysters, making stock, and curing your own catch.
+          </p>
+        </a>
+        <a href="/pantry" class="feature-card">
+          <span class="feature-card__icon">🧂</span>
+          <div class="feature-card__title">Pantry</div>
+          <p class="feature-card__desc">
+            The essential ingredients, spices, and sauces that define coastal cooking — always keep these on hand.
+          </p>
+        </a>
+        <a href="/about" class="feature-card">
+          <span class="feature-card__icon">🌊</span>
+          <div class="feature-card__title">About</div>
+          <p class="feature-card__desc">
+            Who we are, why we cook from the coast, and how this site came to be.
+          </p>
+        </a>
       </div>
     </div>
   </section>
@@ -29,6 +64,7 @@ import { SITE } from "../site.config";
 <style>
   .hero {
     padding-block: var(--space-2xl);
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-accent-light) 100%);
   }
 
   .hero__title {
@@ -55,5 +91,14 @@ import { SITE } from "../site.config";
     display: flex;
     gap: var(--space-sm);
     flex-wrap: wrap;
+  }
+
+  .section-features {
+    padding-block: var(--space-2xl);
+  }
+
+  .section-features__heading {
+    margin-block-end: var(--space-lg);
+    font-size: var(--text-2xl);
   }
 </style>

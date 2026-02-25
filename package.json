@@ -1,8 +1,8 @@
 {
-  "name": "loomwork",
+  "name": "coastal-kitchen",
   "type": "module",
   "version": "1.0.0",
-  "description": "A content-first Astro starter for crafting sites by hand. MDX + Content Collections + Cloudflare Pages.",
+  "description": "Coastal Kitchen — seafood recipes and coastal cooking techniques. Built with Astro and MDX.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

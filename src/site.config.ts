@@ -9,38 +9,35 @@
 
 export const SITE = {
   // ── Identity ────────────────────────────────────────────
-  name: "Loomwork",
-  tagline: "A content-first Astro starter for crafting sites by hand",
+  name: "Coastal Kitchen",
+  tagline: "Fresh seafood recipes and coastal cooking techniques from shore to table",
   description:
-    "MDX + Content Collections + Cloudflare Pages. Write markdown, push to GitHub, auto-deploy in 30 seconds.",
-  url: "https://www.loomwork.org",
-  author: "Dan",
+    "Discover the best of coastal cooking — seafood recipes, grilling techniques, pantry essentials, and the flavors of the sea.",
+  url: "https://verification.loomwork.org",
+  author: "Coastal Kitchen",
   email: "",
 
   // ── Navigation ──────────────────────────────────────────
   // Update these to match your content pages:
   nav: [
-    { label: "About", href: "/about_Loomwork" },
-    { label: "Deploy Guide", href: "/guide" },
-    { label: "Mobile App", href: "/mobile-app" },
+    { label: "About", href: "/about" },
+    { label: "Recipes", href: "/recipes" },
+    { label: "Techniques", href: "/techniques" },
+    { label: "Pantry", href: "/pantry" },
   ],
 
   // ── Fonts ───────────────────────────────────────────────
   // Google Fonts URL. Leave empty to use system fonts (the default).
   // Then set --font-body / --font-heading in site.css.
-  //
-  // Example:
-  // fonts_url: "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&display=swap",
-  fonts_url: "",
+  fonts_url:
+    "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;600;700&display=swap",
 
   // ── Social ──────────────────────────────────────────────
-  social: {
-    github: "https://github.com/danrichardson/loomwork",
-  },
+  social: {},
 
   // ── Footer ──────────────────────────────────────────────
   footer: {
-    company: "Throughline Technical Services, LLC",
+    company: "Coastal Kitchen",
     license: "MIT License",
   },
 } as const;

@@ -13,7 +13,7 @@ import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   // Change this per-site
-  site: "https://www.loomwork.org",
+  site: "https://verification.loomwork.org",
 
   output: "static",
   adapter: cloudflare(),
