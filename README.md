@@ -10,8 +10,28 @@ Write markdown. Push to GitHub. Live in 30 seconds.
 git clone https://github.com/danrichardson/loomwork.git my-site
 cd my-site
 git remote remove origin
+git remote add origin https://github.com/YOUR-USER/YOUR-SITE.git
 npm install
 npm run dev        # → http://localhost:4321
+```
+
+## After Forking: Clean Up Loomwork-Specific Files
+
+Delete these before building your site — they're loomwork repo files, not part of the framework:
+
+```bash
+rm MOBILE_README.md   # loomwork mobile editor docs
+rm Notes.md           # author's dev notes
+rm PROJECT.md         # loomwork project spec
+```
+
+Then replace the loomwork placeholder content:
+
+```bash
+rm src/content/pages/about_Loomwork.mdx
+rm src/content/pages/guide.mdx
+rm src/content/pages/mobile-app.mdx
+rm public/images/1771364152056-image.jpg
 ```
 
 ## Make It Yours

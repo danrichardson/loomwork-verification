@@ -18,6 +18,7 @@ export const SITE = {
   email: "",
 
   // ── Navigation ──────────────────────────────────────────
+  // Update these to match your content pages:
   nav: [
     { label: "About", href: "/about_Loomwork" },
     { label: "Deploy Guide", href: "/guide" },
